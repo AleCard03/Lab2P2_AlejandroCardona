@@ -12,6 +12,7 @@ public class Lab2P2_AlejandroCardona {
     static ArrayList<Chefs> staffChefs = new ArrayList();
     static ArrayList<Mesero> staffMesero = new ArrayList();
     static ArrayList<Bartender> staffBartender = new ArrayList();
+    static ArrayList<Mesa> staffMesa = new ArrayList();
     static int despChef = 0;
     static int matuChef = 0;
     static int despMesero = 0;
@@ -403,7 +404,7 @@ public class Lab2P2_AlejandroCardona {
                         switch ( opcionBartender ){
                             
                             case 1 : {
-                                if( despBartender+ matuBartender <= 8){
+                                if( despBartender+ matuBartender <= 4){
                                     Scanner lea = new Scanner(System.in);
                                     System.out.println("Ingrese el nombre del Bartender");
                                     String nameBartender = lea.nextLine();
@@ -437,9 +438,9 @@ public class Lab2P2_AlejandroCardona {
                                     double sueldo = read.nextDouble();
                                     read = new Scanner(System.in);
 
-                                    Mesero meserx = new Mesero(nameBartender , turnoBartender_String , edadBartender , sueldo ,  licores);
+                                    Bartender bartender = new Bartender(nameBartender , turnoBartender_String , edadBartender , sueldo ,  licores);
 
-                                    staffMesero.add(meserx);
+                                    staffBartender.add(bartender);
                                 }
                                 else{
                                     System.out.println("Considere eliminar algun Bartender");
@@ -564,6 +565,146 @@ public class Lab2P2_AlejandroCardona {
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     case 4 : {
                         
+                        System.out.println("""
+                                           Qué operación desea realizar?
+                                           1. Crear
+                                           2. Modificar
+                                           3. Eliminar
+                                           4. Listar""");
+                        int opcionMesa = read.nextInt();
+                        switch (opcionMesa) {
+                            
+                            case 1 : {
+                                
+                                System.out.println("Ingrese la cantidad de platos");
+                                int platos = read.nextInt();
+                                System.out.println("Ingrese la cantidad de utensilios");
+                                int utensilios = read.nextInt();
+                                System.out.println("Ingrese el precio de la mesa");
+                                double precio = read.nextDouble();
+                                
+                                Mesa m = new Mesa(platos , utensilios, precio);
+                                staffMesa.add(m);
+                                
+                                
+                            }//fin case 1 crear
+                            break;
+                            
+                            case 2 : {
+                                
+                                boolean hayMesa = false;
+                                for ( Object x: staffMesa) {
+                                    
+                                    if( x instanceof Mesa){
+                                        
+                                        hayMesa = true;
+                                        
+                                    }
+                                    
+                                }//fin for
+                                
+                                if ( hayMesa ){
+                                    
+                                    String printMesa= "";
+                                    for ( Object x: staffMesa) {
+                                    
+                                        if( x instanceof Mesa){
+
+                                            printMesa+= staffMesa.indexOf(x)+". "+x;
+
+                                        }
+                                    
+                                    }//fin for
+                                    System.out.println("Ingrese el indice de la mesa a modificar\n"+printMesa);
+                                    int i = read.nextInt();
+                                    if ( i < staffMesero.size()&&i>= 0){
+                                        
+                                        System.out.println("""
+                                                           Qué desea modificar?
+                                                           1. Platos
+                                                           2. Utensilios
+                                                           3. Precio
+                                                           """);
+                                        int mesaMod = read.nextInt();
+                                        
+                                        modificarMesa(i , mesaMod);
+                                        
+                                    }
+                                    
+                                }
+                                else{
+                                    System.out.println("Debe ingresar por lo minimo una mesa");
+                                }
+                            }//fin case 2 modificar
+                            break;
+                            
+                            case 3 : {
+                                
+                                boolean hayMesa= false;
+                                for ( Object x: staffMesa) {
+                                    
+                                    if( x instanceof Bartender){
+                                        
+                                        hayMesa = true;
+                                        
+                                    }
+                                    
+                                }//fin for
+                                
+                                if ( hayMesa ){
+                                    
+                                    String printMesa = "";
+                                    for ( Object x: staffMesa) {
+                                    
+                                        if( x instanceof Mesero){
+
+                                            printMesa+= staffMesa.indexOf(x)+". "+x;
+
+                                        }
+                                    
+                                    }//fin for
+                                    System.out.println("Ingrese el indice de la mesa a eliminar\n"+printMesa);
+                                    int i = read.nextInt();
+                                    
+                                    eliminarMesa(i);
+                                    
+                                }//fin if hayChefs
+                                else{
+                                    
+                                    System.out.println("Debe ingresar una mesa primero");
+                                    
+                                }
+                                
+                            }//fin case 3 eliminar
+                            break;
+                            
+                            case 4 : {
+                                double acum = 0;
+                                String printMesa = "";
+                                    for ( Object x: staffMesa) {
+                                    
+                                        if( x instanceof Mesa){
+
+                                            printMesa+= staffMesa.indexOf(x)+". "+x;
+                                            acum+= staffMesa.get(staffMesa.indexOf(x)).getPrecioTotal();
+
+                                        }
+                                    
+                                    }//fin for
+                                System.out.println(printMesa);
+                                System.out.println("El precio total es: "+acum);
+                                
+                            }//fin case 4 listar
+                            break;
+                            
+                            default : {
+                                
+                                System.out.println("Ingreso un valor no valido");
+                                
+                            }
+                            
+                        }
+                        
                     }//fin case 4 mesas
                     break;
                     
@@ -652,6 +793,18 @@ public class Lab2P2_AlejandroCardona {
             }
             staffMesero.remove(i);
             System.out.println("Ha eliminado el mesero de manera exitosa");
+
+
+        }
+        
+    }
+    static void eliminarMesa(int i){
+        
+        if ( i <= staffMesa.size()-1&& i>= 0){
+                                        
+            
+            staffMesa.remove(i);
+            System.out.println("Ha eliminado la mesa de manera exitosa");
 
 
         }
@@ -909,5 +1062,34 @@ public class Lab2P2_AlejandroCardona {
         }
         
     }
-    
+    static void modificarMesa(int i , int mesaMod){
+        
+        switch (mesaMod){
+            case 1 : {
+                 Scanner read = new Scanner(System.in);
+                System.out.println("Ingrese la nueva cantidad de platos");
+                int platosN = read.nextInt();
+                staffMesa.get(i).setPlatos(platosN);
+            }//fin case 1 nombre
+            break;
+
+            case 2 : {
+                Scanner read = new Scanner(System.in);
+                System.out.println("Ingrese utensilios");
+                int utensiliosN = read.nextInt();
+                staffMesa.get(i).setUtensilios(utensiliosN);
+
+            }//fin case 2 edad
+            break;
+
+            case 3 : {
+                Scanner read = new Scanner(System.in);
+                System.out.println("Ingrese precio total");
+                double precioN = read.nextDouble();
+                staffMesa.get(i).setPrecioTotal(precioN);
+                
+            }
+            break;
+        }
+    }
 }//fin clase
